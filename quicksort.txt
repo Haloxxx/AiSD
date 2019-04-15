@@ -1,0 +1,169 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+
+int k;
+int copied;
+int m;
+int * uuu;
+int r;
+int liczba;
+
+
+double czas;
+clock_t start,stop;
+
+
+
+
+
+
+
+
+
+
+void Parti0n (int* i, int* j)
+{
+    int x;
+    int l,p;
+    l=*i;
+    p=*j;
+
+
+
+    //printf("znak---");
+
+    x=uuu[(l+p)/2];
+
+
+    do
+    {
+        while (uuu[l]<x) l=l+1;
+        while (x<uuu[p]) p=p-1;
+
+        if (l<=p)
+        {
+            copied=uuu[l];
+            uuu[l]=uuu[p];
+            uuu[p]=copied;
+            l++;
+            p--;
+        }
+
+    } while (l<=p);
+
+    *i=l;
+    *j=p;
+
+
+
+}
+
+void QuSort (int lewy, int prawy)
+{
+
+
+    int i,j;
+
+
+        i=lewy;
+        j=prawy;
+        //m++;
+
+
+
+    Parti0n(&i,&j);
+
+
+    /*printf("lewy=  %d, j =    %d\n",lewy,j);
+    printf("i=   %d,  prawy =  %d\n",i,prawy);
+
+    system("pause");*/
+
+    if (lewy<j) QuSort(lewy,j);
+
+
+    if(i<prawy) QuSort(i,prawy);
+
+}
+
+void QuickSort(int end)
+{
+
+    //printf("end =  %d",beg,end);
+
+    QuSort(0,end);
+
+}
+
+
+
+int main()
+{
+
+    //m=0;
+
+    srand(time(NULL));   // should only be called once
+    r = rand();
+
+
+
+
+    uuu= (int*) calloc (r,sizeof(int));
+
+    for (int g=0;g<r;g++)
+    {
+        liczba=rand()%10;
+
+
+        //printf("liczba =    %d",liczba);
+
+        uuu[g]=liczba;
+    }
+
+    printf("rozmiar =  %d\n\n\n",r);
+
+
+
+    start = clock();
+    QuickSort(r-1);
+    stop = clock();
+
+    czas = (stop-start) / CLOCKS_PER_SEC;
+
+    k=0;
+
+
+    printf("wynik\n\n\n");
+
+    while (k<r)
+    {
+        printf("%d,",uuu[k]);
+        k++;
+    }
+
+    int unsorted = 0;
+
+   for( int p = 0 ; p < r - 1 ; p++ )
+   {
+      if( uuu[p] > uuu[p+1] )
+      {
+         unsorted++;
+         break;
+      }
+   }
+
+   if (unsorted > 0)
+   {
+      printf("\nNie dziala %d", unsorted);
+      return 1;
+   }
+
+
+    fopen("czas.txt","w");
+    fwrite("%d %f\n",sizeof(integer),czas);
+    fclose("czas.txt");
+
+    return 0;
+}
